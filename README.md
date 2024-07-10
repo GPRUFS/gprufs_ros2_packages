@@ -1,2 +1,2 @@
-# py_camera_pubsub
-Pacote ROS 2 em python para acesso de câmera embarcada no robô
+# Biblioteca ROS 2 
+Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realizar interfaces com os robôs do Laboratório de Pesquisa em Robótica da Universidade Federal de Sergipe
