@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'camera_pub = py_camera.publisher_camera_function:main',
+            'camera_pub2 = py_camera.publisher_camera_function2:main',
             'camera_sub = py_camera.subscriber_camera_function:main',
         ],
     },
