@@ -1,0 +1,48 @@
+import rclpy
+import time
+from rclpy.node import Node
+from std_msgs.msg import Float32MultiArray
+
+
+class lidarSubscriber(Node):
+
+    def __init__(self):
+        super().__init__('lidar_subscriber')
+        self.subscription_ = self.create_subscription(Float32MultiArray, '/robot/lidar', self.lidar_callback, 1)
+        self.subscription_ # para previnir o "warning" de variável sem uso
+        self.lidar_msg = Float32MultiArray()
+        self.last_time = time.time()
+        self.fps = 0.0
+
+    def lidar_callback(self, msg):
+        current_time = time.time()
+        elapsed_time = current_time - self.last_time
+        self.last_time = current_time
+
+        if elapsed_time > 0:
+            self.fps = 1.0 / elapsed_time
+        self.lidar_msg = msg
+        self.get_logger().info(f'Dados Recebidos - FPS: {self.fps:.2f}')
+        
+
+
+def main(args=None):
+
+
+    # Inicilaização
+    rclpy.init(args=args)
+
+    # Criação de um nó instanciando uma classe do tipo "Node", por meio de "hierarquia"
+    lidar_subscriber = lidarSubscriber()
+
+    # faz o spin do nó para habilitar recebimento de callbacks
+    rclpy.spin(lidar_subscriber)
+
+    # especificação de shutdown
+    lidar_subscriber.destroy_node()
+    rclpy.shutdown()
+    
+
+
+if __name__ == '__main__':
+    main()
