@@ -1,6 +1,8 @@
 import rclpy
+import numpy as np
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
+from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Float32
 import PyLidar3
 
 
@@ -8,32 +10,33 @@ class LidarPublisher(Node):
 
     def __init__(self):
         super().__init__('lidar_publisher')
-        self.publisher_ = self.create_publisher(Float32MultiArray, '/robot/lidar', 1)
+        self.publisher_ = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX4
-        self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
-        self.lidar_msg = Float32MultiArray()
+        self.lidarx4 = PyLidar3.YdLidarX4("COM3",2000)
+        self.lidar_msg = LaserScan()
         if(not self.lidarx4.Connect()):
             print("Cannot open lidarX4")
             exit(1)
+        print("Connected to lidarX4")
         self.lidarx4_read = self.lidarx4.StartScanning()
 
     def sendMeasures(self):
+        self.get_logger().info('Enviando ...')
         # Get latest lidar measures
         measures = next(self.lidarx4_read)
         if(len(measures) > 0): 
-            self.lidar_msg.data = self.convert_to_scalar(measures)
+            self.lidar_msg.ranges,self.lidar_msg.angle_min,self.lidar_msg.angle_max = self.convert_to_scalar(measures)
         self.publisher_.publish(self.lidar_msg)
-        self.get_logger().info('Medição Enviada')
+        self.get_logger().info('Medidas Enviadas')
 
-    def convert_to_scalar(measures):
+    def convert_to_scalar(self,measures):
         angles = []
         distances = []
-        for measure in measures:
-            angle,distance = measure.get_pair()
+        for angle in measures:
+            distance = float(measures[angle])
             angles.append(angle*(np.pi/180))
             distances.append(distance)
-        return angles + distances
-        
+        return distances, np.min(angles), np.max(angles)
 
 
 def main(args=None):

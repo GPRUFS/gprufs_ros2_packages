@@ -1,17 +1,18 @@
 import rclpy
+import numpy as np
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
-from LidarX2 import LidarX2
+from sensor_msgs.msg import LaserScan
+from py_lidar.LidarX2 import LidarX2
 
 
 class LidarPublisher(Node):
 
     def __init__(self):
         super().__init__('lidar_publisher')
-        self.publisher_ = self.create_publisher(Float32MultiArray, '/robot/lidar', 1)
+        self.publisher_ = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX2
-        self.lidarx2 = LidarX2("/dev/ttyUSB0")  # Name of the serial port, can be /dev/tty*, COM*, etc.
-        self.lidar_msg = Float32MultiArray()
+        self.lidarx2 = LidarX2("COM3")  # Name of the serial port, can be /dev/tty*, COM*, etc.
+        self.lidar_msg = LaserScan()
         if not self.lidarx2.open():
             print("Cannot open lidarX2")
             exit(1)
@@ -19,18 +20,18 @@ class LidarPublisher(Node):
     def sendMeasures(self):
         measures = self.lidarx2.getMeasures()  
         if(len(measures) > 0): 
-            self.lidar_msg.data = self.convert_to_scalar(measures)
+            self.lidar_msg.ranges,self.lidar_msg.angle_min,self.lidar_msg.angle_max = self.convert_to_scalar(measures)
         self.publisher_.publish(self.lidar_msg)
-        self.get_logger().info('Medição Enviada')
+        self.get_logger().info('Medidas Enviadas')
 
-    def convert_to_scalar(measures):
+    def convert_to_scalar(self,measures):
         angles = []
         distances = []
         for measure in measures:
-            angle,distance = measure.get_pair()
-            angles.append(angle*(np.pi/180))
-            distances.append(distance)
-        return angles + distances
+            angles.append(measure.angle*(np.pi/180))
+            distances.append(measure.distance)
+
+        return distances, np.min(angles), np.max(angles)
         
 
 

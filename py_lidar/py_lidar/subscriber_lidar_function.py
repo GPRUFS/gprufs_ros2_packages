@@ -1,16 +1,16 @@
 import rclpy
 import time
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
+from sensor_msgs.msg import LaserScan
 
 
 class lidarSubscriber(Node):
 
     def __init__(self):
         super().__init__('lidar_subscriber')
-        self.subscription_ = self.create_subscription(Float32MultiArray, '/robot/lidar', self.lidar_callback, 1)
+        self.subscription_ = self.create_subscription(LaserScan, '/robot/lidar', self.lidar_callback, 1)
         self.subscription_ # para previnir o "warning" de variável sem uso
-        self.lidar_msg = Float32MultiArray()
+        self.lidar_msg = LaserScan()
         self.last_time = time.time()
         self.fps = 0.0
 
