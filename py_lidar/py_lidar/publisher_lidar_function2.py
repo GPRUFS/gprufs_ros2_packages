@@ -12,7 +12,7 @@ class LidarPublisher(Node):
         super().__init__('lidar_publisher')
         self.publisher_ = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX4
-        self.lidarx4 = PyLidar3.YdLidarX4("COM3",2000)
+        self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
         self.lidar_msg = LaserScan()
         if(not self.lidarx4.Connect()):
             print("Cannot open lidarX4")

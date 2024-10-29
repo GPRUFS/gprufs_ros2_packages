@@ -13,14 +13,14 @@ class WalkPublisher(Node):
         super().__init__('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX2
-        self.lidarx2 = LidarX2("COM3")  # Name of the serial port, can be /dev/tty*, COM*, etc.
+        self.lidarx2 = LidarX2("/dev/ttyUSB0")  # Name of the serial port, can be /dev/tty*, COM*, etc.
         self.lidar_msg = LaserScan()
         if not self.lidarx2.open():
             print("Cannot open lidarX2")
             exit(1)
         # -- Realiza as inscrições no tópico do 
         #Comunicação USB com o stm32
-        self.stm32 = serial.Serial(port = 'COM9',baudrate=115200)
+        self.stm32 = serial.Serial(port = '/dev/ttyACM0',baudrate=115200)
         self.vel = Twist()
         self.subscription = self.create_subscription(Twist, '/robot/cmd_vel', self.stm32_callback, 1)
         #Modelo cinemático do robô

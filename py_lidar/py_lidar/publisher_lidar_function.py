@@ -11,7 +11,7 @@ class LidarPublisher(Node):
         super().__init__('lidar_publisher')
         self.publisher_ = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX2
-        self.lidarx2 = LidarX2("COM3")  # Name of the serial port, can be /dev/tty*, COM*, etc.
+        self.lidarx2 = LidarX2("/dev/ttyUSB0")  # Name of the serial port, can be /dev/tty*, COM*, etc.
         self.lidar_msg = LaserScan()
         if not self.lidarx2.open():
             print("Cannot open lidarX2")
