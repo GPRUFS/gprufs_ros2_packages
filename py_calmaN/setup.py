@@ -23,6 +23,7 @@ setup(
             'walk = py_calmaN.walk:main',
             'lidar_test = py_calmaN.lidar_test:main',
             'encoder_test = py_calmaN.encoder_test:main',
+            'walk_pub = py_calmaN.walk_pub:main',
         ],
     },
 )
