@@ -6,6 +6,7 @@ Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realiza
 - [Como usar?](#como-usar)
 - [Descreição dos Pacotes](#descrição-dos-pacotes)
 - [Estrutura Básica de um Nó ROS 2](#estrutura-básica-de-um-nó-ros-2)
+- [Como Criar um Pacote?](#como-criar-um-pacote)
 
 
 ## Requisitos
@@ -153,7 +154,7 @@ Até então, a interação entre os nós presentes nesse repositório, foi imple
 
 </div>
 
-## Como criar um pacote?
+## Como Criar um Pacote?
 
 O procedimento para criar um pacote ROS 2 é extremamente simples. Primeiramente, garanta que vc está no diretório `src` do *workspace*:
 
@@ -164,7 +165,30 @@ cd \ros2_ws\src
 A sintaxe para criar um pacote automaticamente é:
 
 <pre>
-ros2 pkg create --build-type ament_python --license Apache-2.0 <nome-do-pacote>
+ros2 pkg create --build-type ament_python --license Apache-2.0 my_package
+</pre>
+
+Ao utilizar esse comando, o diretório será criado `ros2_ws/src/my_package`, e dentro dele terão
+
+<pre>
+.
+├── my_package
+├── resource
+├── test
+├── package.xml
+├── setup.cfg
+└── setup.py
+
+3 directories, 3 files
+</pre>
+
+No dieretório `my_package` é adicionado o arquivo `.py` que vair gerar o nó (ex.: [camera_pub](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_camera/py_camera/publisher_camera_function.py) ). No arquivo `package.xml` são apontadas as dependências para execução do pacote, e são configuradas as informações de autoria e descrição do pacote. Os arquivos `setup.cfg` e `setup.py` são arquivos de configuração, em especial, sempre que um novo nó é adicionado ao pacote, my_node deve-se adicionar um novo `entry_point` no arquivo `setup.py`:
+
+<pre>
+ entry_points={
+   'console_scripts': [
+           'my_node = my_py_pkg.my_node:main'
+   ]
 </pre>
 
 
