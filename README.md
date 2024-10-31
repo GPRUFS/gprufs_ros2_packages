@@ -153,4 +153,19 @@ Até então, a interação entre os nós presentes nesse repositório, foi imple
 
 </div>
 
+## Como criar um pacote?
+
+O procedimento para criar um pacote ROS 2 é extremamente simples. Primeiramente, garanta que vc está no diretório `src` do *workspace*:
+
+<pre>
+cd \ros2_ws\src  
+</pre>
+
+A sintaxe para criar um pacote automaticamente é:
+
+<pre>
+ros2 pkg create --build-type ament_python --license Apache-2.0 <nome-do-pacote>
+</pre>
+
+
 
