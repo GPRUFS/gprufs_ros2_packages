@@ -132,7 +132,7 @@ Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó
 
 <div align="center">
   
-||||
+||Etapa|Função do Python|
 |----------------------|-------------------------|-------------------------|
 | 1 | Inicialização | `rclpy.init(args=args)` | 
 | 2 | Criação de um ou mais nós | `node = Node()` | 
