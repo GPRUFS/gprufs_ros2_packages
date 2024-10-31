@@ -147,6 +147,10 @@ No ROS 2 os nós podem interagir por meio de 3 abordagens principais: [Tópicos]
 
 Até então, a interação entre os nós presentes nesse repositório, foi implementada usando a abordagem de tópicos, com as conexões ilustradas no grafo abaixo.
 
+<div align="center">
+
 <img src="https://github.com/user-attachments/assets/39d7f2dc-d3e5-48fc-b13c-8209e0aad4d0" alt="grafo" width="50%">
+
+</div>
 
 
