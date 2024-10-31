@@ -91,7 +91,7 @@ No windows:
 
 <pre>
 call C:\dev\ros2\local_setup.bat
-call install\setup.bat
+call install\local_setup.bat
 </pre>
      
 No Linux:
