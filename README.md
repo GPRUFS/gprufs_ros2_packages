@@ -191,5 +191,7 @@ No dieretório `my_package` é adicionado o arquivo `.py` que vair gerar o nó (
    ]
 </pre>
 
+Fazendo isso, é possível executar o nó com o comando:  `ros2 run my_package my_node`.
+
 
 
