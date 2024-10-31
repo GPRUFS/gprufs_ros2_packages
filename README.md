@@ -146,6 +146,6 @@ Todo nó do ROS 2 possui a estrutura básica apresentada na tabela abaixo.
 No ROS 2 os nós podem interagir por meio de 3 abordagens principais: [Tópicos](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) (`ros2 topic`), [Serviços](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html) (`ros2 service`), [Ações](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) (`ros2 action`).
 
 Até então, a interação entre os nós presentes nesse repositório, foi implementada usando a abordagem de tópicos, com as conexões ilustradas no grafo abaixo.
-![image](https://github.com/user-attachments/assets/39d7f2dc-d3e5-48fc-b13c-8209e0aad4d0)
+<img src="https://github.com/user-attachments/assets/39d7f2dc-d3e5-48fc-b13c-8209e0aad4d0" alt="grafo" width="50%">
 
 
