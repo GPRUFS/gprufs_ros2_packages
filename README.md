@@ -48,5 +48,34 @@ Nesse ponto o diretírio `ros_ws` possui apenas um diretório:
 </pre>
 
 
-  3. criar um *workspace* (veja [Creating a Workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html)):
+  3. Clonar o repositório em `~\ros2_ws\src`. Considerado que você já está no diretório `~\ros2_ws\src`:
+<pre>
+git clone https://github.com/rodrigopassoss/gprufs_ros2_packages.git
+</pre>     
+
+  4. Vai para o diretório `~\ros2_ws`, e builda o *workspace* usando colcon (veja [Build the workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html#build-the-workspace-with-colcon)):
+
+No windows:
+
+<pre>
+colcon build --merge-install
+</pre>
+     
+No Linux:
+
+<pre>
+colcon build
+</pre>
+
+Nesse ponto o diretírio `ros_ws` possui os seguintes diretórios:
+<pre>
+.
+├── build
+├── install
+├── log
+└── src
+
+4 directories, 0 files
+</pre>
+
 
