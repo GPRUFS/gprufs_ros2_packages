@@ -182,7 +182,7 @@ Ao utilizar esse comando, o diretório será criado `ros2_ws/src/my_package`, e 
 3 directories, 3 files
 </pre>
 
-No dieretório `my_package` é adicionado o arquivo `.py` que vair gerar o nó (ex.: [camera_pub](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_camera/py_camera/publisher_camera_function.py) ). No arquivo `package.xml` são apontadas as dependências para execução do pacote, e são configuradas as informações de autoria e descrição do pacote. Os arquivos `setup.cfg` e `setup.py` são arquivos de configuração, em especial, sempre que um novo nó é adicionado ao pacote, my_node deve-se adicionar um novo `entry_point` no arquivo `setup.py`:
+No dieretório `my_package` é adicionado o arquivo `.py` que vair gerar o nó (ex.: [camera_pub](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_camera/py_camera/publisher_camera_function.py) ). No arquivo `package.xml` são apontadas as dependências para execução do pacote, e são configuradas as informações de autoria e descrição do pacote. Os arquivos `setup.cfg` e `setup.py` são arquivos de configuração, em especial, sempre que um novo nó é adicionado ao pacote (ex.: `my_node`) deve-se adicionar um novo `entry_point` no arquivo `setup.py`:
 
 <pre>
  entry_points={
