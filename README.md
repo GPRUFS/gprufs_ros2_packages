@@ -131,12 +131,14 @@ Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó
 ## Estrutura Básica de um Nó ROS 2
 
 <div align="center">
+  
 ||||
 |----------------------|-------------------------|-------------------------|
 | 1 | Inicialização | `rclpy.init(args=args)` | 
 | 2 | Criação de um ou mais nós | `node = Node()` | 
 | 3 | Processamento e Callbacks | `rclpy.spin(node)` |
 | 4 | Finalização | `node.destroy_node()` e `rclpy.shutdown()`|
+
 </div>
 
 
