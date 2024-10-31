@@ -124,3 +124,7 @@ ros2 run py_calmaN walk
 |[py_lidar](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_lidar/py_lidar) | [lidar_pub](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_lidar/py_lidar/publisher_lidar_function.py) | PC/Raspbarry Pi (Computador de Bordo do Robô)  |  Esse nó realiza uma interface com o [Lidar X2](https://www.ydlidar.com/products/view/6.html) e publica as informações no tópico `robot/lidar`.|
 |[py_lidar](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_lidar/py_lidar) | [lidar_pub2](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_lidar/py_lidar/publisher_lidar_function2.py) | PC/Raspbarry Pi (Computador de Bordo do Robô)  |  Esse nó realiza uma interface com o [Lidar X4](https://www.ydlidar.com/products/view/5.html) e publica as informações no tópico `robot/lidar`.|
 |[py_lidar](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_lidar/py_lidar) | [lidar_sub](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_lidar/py_lidar/subscriber_lidar_function.py) | PC/Raspbarry Pi (Computador de Bordo do Robô)  |  Esse nó recebe as informações do Lidar por meio do tópico `robot/lidar` e exibe o FPS.|
+
+Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó>`.
+
+## Estrutura Básica de um Nó ROS 2
