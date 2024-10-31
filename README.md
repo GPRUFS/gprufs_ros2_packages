@@ -109,6 +109,7 @@ ros2 run py_calmaN walk
 
 ## Descrição dos Pacotes
 
-
-
+| Pacote       | Nó | Dispositivo |  Descrição      |
+|----------------------|-------------------------|-------------------------|-------------------------|
+|[py_bubbleRobotController](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_bubbleRobotController) | walk | PC | Nó usado para o controle do Bobble Robot do CoppeliaSim. O nó recebe os dados sensoriais (uma flag que indica se há obstáculo a frente do robô) por meio do tópico `/robot/sensorTrigger`, e publica as velocidades das rodas esquerda e direita, respectivamente pelos tópicos `/robot/leftMotorSpeed` e `/robot/rightMotorSpeed`|
 
