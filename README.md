@@ -96,7 +96,7 @@ source /opt/ros/humble/setup.bash
 source install/local_setup.bash
 </pre>
 
-  4. Agora você pode executar qualquer pacote usando o comando `ros2 run`, por exemplo:
+  5. Agora você pode executar qualquer pacote usando o comando `ros2 run`, por exemplo:
 
 <pre>
 ros2 run py_calmaN walk
