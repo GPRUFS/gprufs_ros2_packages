@@ -3,7 +3,7 @@ Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realiza
 
 ## Índice
 - [Requisitos](##Requisitos)
-- [Como usar?](##Como-usar?)
+- [Como usar?](#como-usar)
 
 
 ## Requisitos
