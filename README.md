@@ -4,6 +4,7 @@ Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realiza
 ## Índice
 - [Requisitos](#requisitos)
 - [Como usar?](#como-usar)
+- [Descreição dos Pacotes](#descrição-dos-pacotes)
 
 
 ## Requisitos
@@ -114,4 +115,5 @@ ros2 run py_calmaN walk
 |[py_bubbleRobotController](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_bubbleRobotController/py_bubbleRobotController) | [walk](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_bubbleRobotController/py_bubbleRobotController/walk.py) | PC | Nó usado para o controle do [Bobble Robot do CoppeliaSim](https://github.com/rodrigopassoss/gprufs_v-rep_projects/tree/main/scenes). O nó recebe os dados sensoriais (uma flag que indica se há obstáculo a frente do robô) por meio do tópico `/robot/sensorTrigger`, e publica as velocidades das rodas esquerda e direita, respectivamente pelos tópicos `/robot/leftMotorSpeed` e `/robot/rightMotorSpeed`|
 |[py_calmaN](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_calmaN/py_calmaN) | [encoder_test](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_calmaN/py_calmaN/encoder_test.py) | PC | Esse nó realiza apenas a aquisição dos dados do enconder com proposito de teste. Os dados são recebidos pelo tópico `/robot/encoder`. Esse nó foi testado apenas com o [modelo do calmaN no Coppelia](https://github.com/rodrigopassoss/gprufs_v-rep_projects/tree/main/scenes)|
 |[py_calmaN](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_calmaN/py_calmaN) | [lidar_test](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_calmaN/py_calmaN/lidar_test.py) | PC | Esse nó realiza apenas a aquisição dos dados do lidar, e tbm plota os pontos adiquiridos, com proposito de teste. Os dados são recebidos pelo tópico `/robot/lidar`. Esse nó foi testado tanto com a [simuação](https://github.com/rodrigopassoss/gprufs_v-rep_projects/tree/main/scenes) quanto com o Lidar real. Esse mesmo teste tbm foi implementado com o [MATLAB/Octave](https://github.com/rodrigopassoss/gprufs_ros2_udp).|
+|[py_calmaN](https://github.com/rodrigopassoss/gprufs_ros2_packages/tree/main/py_calmaN/py_calmaN) | [walk](https://github.com/rodrigopassoss/gprufs_ros2_packages/blob/main/py_calmaN/py_calmaN/walk.py) | PC | |
 
