@@ -78,4 +78,27 @@ Nesse ponto o diretírio `ros_ws` possui os seguintes diretórios:
 4 directories, 0 files
 </pre>
 
+Obs.: Para instalar apenas um dos pacotes, por exemplo, apenas o `py_calmaN`, use o comando `colcon build --packages-select py_calmaN`.
+
+  4. Após concluir essas etapas, pode fechar o terminal e abrir um novo. No novo terminal, no diretório `ros_ws`:
+
+No windows:
+
+<pre>
+call C:\dev\ros2\local_setup.bat
+call install\setup.bat
+</pre>
+     
+No Linux:
+
+<pre>
+source /opt/ros/humble/setup.bash
+source install/local_setup.bash
+</pre>
+
+  4. Agora você pode executar qualquer pacote usando o comando `ros2 run`, por exemplo:
+
+<pre>
+ros2 run py_calmaN walk
+</pre>
 
