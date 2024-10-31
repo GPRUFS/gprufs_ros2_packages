@@ -129,7 +129,7 @@ ros2 run py_calmaN walk
 Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó>`.
 
 ## Estrutura Básica de um Nó ROS 2
-
+||||
 |----------------------|-------------------------|-------------------------|
 | 1 | Inicialização | `rclpy.init(args=args)` | 
 | 2 | Criação de um ou mais nós | `node = Node()` | 
