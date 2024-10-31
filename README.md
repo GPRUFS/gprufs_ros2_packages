@@ -21,6 +21,8 @@ No Linux:
 
    * `source /opt/ros/humble/setup.bash`
 
+Obs.: Essa etapa deve ser realizada sempre que um terminal novo for aberto.
+
   2. criar um *workspace* (veja [Creating a Workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html)):
 
 No windows:
@@ -36,3 +38,15 @@ No Linux:
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
 </pre>
+
+Nesse ponto o diretírio `ros_ws` possui apenas um diretório:
+<pre>
+.
+└── src
+
+1 directory, 0 files
+</pre>
+
+
+  3. criar um *workspace* (veja [Creating a Workspace](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html)):
+
