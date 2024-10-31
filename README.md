@@ -20,7 +20,7 @@ Se você está começando no ROS 2, recomendo fortemente que você siga os [tuto
 
 No windows:
 
-   * `call C:\dev\ros2\local_setup.bat` (troque `C:\dev` pelo dieretório em que o ROS 2 foi instalado, caso não tenha sido nesse)
+   * `call C:\dev\ros2\local_setup.bat` (troque `C:\dev` pelo dieretório em que o ROS 2 foi instalado, caso não tenha sido nesse.)
      
 No Linux:
 
