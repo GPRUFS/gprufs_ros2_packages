@@ -130,6 +130,8 @@ Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó
 
 ## Estrutura Básica de um Nó ROS 2
 
+Todo nó do ROS 2 possui a estrutura básica apresentada na tabela abaixo.
+
 <div align="center">
   
 ||Etapa|Função do Python|
@@ -140,6 +142,8 @@ Para executar qualquer pacote deve-se utilizar o comando `ros2 run <Pacote> <Nó
 | 4 | Finalização | `node.destroy_node()` e `rclpy.shutdown()`|
 
 </div>
+
+No ROS 2 os nós podem interagir por meio de 3 abordagens principais: [Tópicos](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) (`ros2 topic`), [Serviços](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Services/Understanding-ROS2-Services.html) (`ros2 service`), [Ações](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Actions/Understanding-ROS2-Actions.html) (`ros2 action`)
 
 
 
