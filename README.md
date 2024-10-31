@@ -191,7 +191,13 @@ No dieretório `my_package` é adicionado o arquivo `.py` que vair gerar o nó (
    ]
 </pre>
 
-Fazendo isso, é possível executar o nó com o comando:  `ros2 run my_package my_node`. Informações mais detalhadas sobre como criar os pacotes podem ser encontradas nos tutoriais oficiais: [Creating a package](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html) e [Writing a simple publisher and subscriber (C++)](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html).
+Configurado essas coisas, vá para o diretório `ros2_ws` e builda o pacote com comando:
+
+<pre>
+colcon build --packages-select my_package
+</pre>
+
+Após isso, é possível executar o nó com o comando:  `ros2 run my_package my_node`. Informações mais detalhadas sobre como criar os pacotes podem ser encontradas nos tutoriais oficiais: [Creating a package](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html) e [Writing a simple publisher and subscriber (C++)](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html).
 
 
 
