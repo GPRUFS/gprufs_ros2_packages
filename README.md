@@ -200,5 +200,12 @@ colcon build --packages-select my_package
 
 Após isso, é possível executar o nó com o comando:  `ros2 run my_package my_node`. Informações mais detalhadas sobre como criar os pacotes podem ser encontradas nos tutoriais oficiais: [Creating a package](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html) e [Writing a simple publisher and subscriber (C++)](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html).
 
+## Repositórios Associados
+
+|Repositório|Descrição|
+|-------------------------|-------------------------|
+| [gprufs_v-rep_projects](https://github.com/rodrigopassoss/gprufs_v-rep_projects) | Este repositório contém modelos de robôs e cenas do simulador [CoppeliaSim (V-REP)](https://manual.coppeliarobotics.com/), com comunicação através do [ROS 2](https://docs.ros.org/en/humble/Installation.html). 
+ | 
+| [gprufs_ros2_udp](https://github.com/rodrigopassoss/gprufs_ros2_udp/tree/main) | Este repositório contém exemplos de códigos para controle dos robôs via ROS 2 com o MATLAB e Octave. | 
 
 
