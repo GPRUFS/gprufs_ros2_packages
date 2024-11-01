@@ -7,7 +7,7 @@ Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realiza
 - [Descreição dos Pacotes](#descrição-dos-pacotes)
 - [Estrutura Básica de um Nó ROS 2](#estrutura-básica-de-um-nó-ros-2)
 - [Como Criar um Pacote?](#como-criar-um-pacote)
-- [Futuros Desenvolvimentos](#futuros-desenvolvimentos)
+- [Repositórios Associados](#repositórios-associados)
 
 
 ## Requisitos
@@ -202,9 +202,13 @@ Após isso, é possível executar o nó com o comando:  `ros2 run my_package my_
 
 ## Repositórios Associados
 
+<div align="center">
+  
 |Repositório|Descrição|
 |-------------------------|-------------------------|
 | [gprufs_v-rep_projects](https://github.com/rodrigopassoss/gprufs_v-rep_projects) | Este repositório contém modelos de robôs e cenas do simulador [CoppeliaSim (V-REP)](https://manual.coppeliarobotics.com/), com comunicação através do [ROS 2](https://docs.ros.org/en/humble/Installation.html). | 
  | [gprufs_ros2_udp](https://github.com/rodrigopassoss/gprufs_ros2_udp/tree/main) | Este repositório contém exemplos de códigos para controle dos robôs via ROS 2 com o MATLAB e Octave. | 
+
+</div>
 
 
