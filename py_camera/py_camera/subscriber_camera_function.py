@@ -15,6 +15,7 @@ class CameraSubscriber(Node):
         self.bridge = CvBridge()
         self.last_time = time.time()
         self.fps = 0.0
+        self.fps_file = open("D:/fps_data.txt", "w")  # Abre o arquivo para escrita
 
     def camera_callback(self, msg):
         current_time = time.time()
@@ -23,6 +24,9 @@ class CameraSubscriber(Node):
 
         if elapsed_time > 0:
             self.fps = 1.0 / elapsed_time
+
+        # Escreve o valor de FPS no arquivo
+        self.fps_file.write(f"{self.fps:.2f}\n")
         
         frame = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
         cv2.putText(frame, f'FPS: {self.fps:.2f}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
@@ -30,7 +34,8 @@ class CameraSubscriber(Node):
         cv2.waitKey(1)
         self.get_logger().info(f'Frame received - FPS: {self.fps:.2f}')
         
-
+    def destroy(self):
+        self.fps_file.close()  # Fecha o arquivo ao destruir o nó
 
 def main(args=None):
 

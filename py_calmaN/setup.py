@@ -24,6 +24,8 @@ setup(
             'lidar_test = py_calmaN.lidar_test:main',
             'encoder_test = py_calmaN.encoder_test:main',
             'walk_pub = py_calmaN.walk_pub:main',
+            'walk_pub2 = py_calmaN.walk_pub2:main',
+            'walk_pub3 = py_calmaN.walk_pub3:main',
             'matlab_link = py_calmaN.matlab_udp_link:main',
         ],
     },

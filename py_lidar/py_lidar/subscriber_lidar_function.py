@@ -13,6 +13,7 @@ class lidarSubscriber(Node):
         self.lidar_msg = LaserScan()
         self.last_time = time.time()
         self.fps = 0.0
+        self.fps_file = open("D:/fps_data.txt", "w")  # Abre o arquivo para escrita
 
     def lidar_callback(self, msg):
         current_time = time.time()
@@ -21,8 +22,15 @@ class lidarSubscriber(Node):
 
         if elapsed_time > 0:
             self.fps = 1.0 / elapsed_time
+
+        # Escreve o valor de FPS no arquivo
+        self.fps_file.write(f"{self.fps:.2f}\n")
+
         self.lidar_msg = msg
         self.get_logger().info(f'Dados Recebidos - FPS: {self.fps:.2f}')
+
+    def destroy(self):
+        self.fps_file.close()  # Fecha o arquivo ao destruir o nó
         
 
 
