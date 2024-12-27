@@ -59,6 +59,12 @@ class Walk(Node):
 
         else:
             self.get_logger().info('Esperando receber a primeira mensagem')
+            d = Twist()
+            d.angular.x = 0.0
+            d.angular.y = 0.0
+            self.velPub.publish(d)
+            # Log
+            self.get_logger().info(f'VelLeft: {d.angular.x:.2f} | VelRight: {d.angular.y:.2f}')
 
 
     def lidar_callback(self, msg):
