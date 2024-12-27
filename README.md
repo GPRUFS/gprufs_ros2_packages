@@ -89,7 +89,7 @@ Nesse ponto o diretírio `ros_ws` possui os seguintes diretórios:
 
 Obs.: Para instalar apenas um dos pacotes, por exemplo, apenas o `py_calmaN`, use o comando `colcon build --packages-select py_calmaN`.
 
-  4. Após concluir essas etapas, pode fechar o terminal e abrir um novo. No novo terminal, no diretório `ros_ws`:
+  4. Após concluir essas etapas, pode fechar o terminal e abrir um novo. No novo terminal, no diretório `ros_ws` (Essa etapa deve ser feita sempre que abrir um novo terminal, é possível automatizá-la):
 
 No windows:
 
