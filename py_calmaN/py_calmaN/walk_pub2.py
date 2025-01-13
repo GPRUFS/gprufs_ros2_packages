@@ -58,17 +58,25 @@ class WalkPublisher(Node):
 
         FI = self.modelo_cinematico_inverso @ V #[fi_d;fi_e]
 
-        msg2 = [255,0,0]
-        if(FI[0] >= 0):  
-            msg2[1] = round(100*np.abs(FI[0][0]))
+        msg2 = [254,0,0,0,0,0,0,0,0,0]
+
+        logica = 0
+        if(FI[1] >= 0):  
+            msg2[8] = round(100*np.abs(FI[1][0]))
+            logica = self.bitset(logica,2)
         else:
-            msg2[1] = -round(100*np.abs(FI[0][0])) + 127
-        msg2[1] = int(msg2[1])
-        if(FI[1] >= 0):
-            msg2[2] = round(100*np.abs(FI[1][0]))
+            msg2[8] = round(100*np.abs(FI[1][0]))
+            logica = self.bitset(logica,3)
+        msg2[8] = int(msg2[8])
+        if(FI[0] >= 0):
+            msg2[9] = round(100*np.abs(FI[0][0]))
+            logica = self.bitset(logica,4)
         else:
-            msg2[2] = -round(100*np.abs(FI[1][0])) + 127
-        msg2[2] = int(msg2[2])
+            msg2[9] = round(100*np.abs(FI[0][0]))
+            logica = self.bitset(logica,5)
+        msg2[9] = int(msg2[9])
+
+        msg2[7] = logica
         self.stm32.write(msg2)
         self.get_logger().info('Velocidades enviadas pela serial')
 
@@ -87,6 +95,12 @@ class WalkPublisher(Node):
             distances.append(measure.distance)
 
         return distances, np.min(angles), np.max(angles)
+    
+    def bitset(self, logica, pos, val=1):
+        if val:  # Define o bit para 1
+            return logica | (1 << (pos - 1))
+        else:  # Define o bit para 0
+            return logica & ~(1 << (pos - 1))
     
     def sendframe(self):
         ret, frame = self.camera.read()
