@@ -35,8 +35,8 @@ class WalkPublisher(Node):
         self.vel = Twist()
         self.subscription = self.create_subscription(Twist, '/robot/cmd_vel', self.stm32_callback, 1)
         #Modelo cinemático do robô
-        R = 5.3 #raio das rodas em cm
-        d = 11.25/2 #distância entre as rodas e o centro do robô em cm
+        R = 11.5 #raio das rodas em cm
+        d = 19.5/2 #distância entre as rodas e o centro do robô em cm
         self.modelo_cinematico = 0.5*np.array([[R,R],[R/d,- R/d]])
         self.modelo_cinematico_inverso = np.linalg.inv(self.modelo_cinematico)
         self.Linear_maximo = 5.3
@@ -48,29 +48,29 @@ class WalkPublisher(Node):
 
     def enviar_velocidade(self, msg):
 
-        FI = np.array([[msg.linear.x,msg.angular.y]]).T #[v;W]
+        FI = np.array([[msg.angular.x,msg.angular.y]]).T #[v;W]
 
         msg2 = [254,0,0,0,0,0,0,0,0,0]
 
         logica = 0
         if(FI[1] >= 0):  
-            msg2[8] = round(100*np.abs(FI[1][0]))
+            msg2[8] = round(250*np.abs(FI[1][0]))
             logica = self.bitset(logica,2)
         else:
-            msg2[8] = round(100*np.abs(FI[1][0]))
+            msg2[8] = round(250*np.abs(FI[1][0]))
             logica = self.bitset(logica,3)
         msg2[8] = int(msg2[8])
         if(FI[0] >= 0):
-            msg2[9] = round(100*np.abs(FI[0][0]))
+            msg2[9] = round(250*np.abs(FI[0][0]))
             logica = self.bitset(logica,4)
         else:
-            msg2[9] = round(100*np.abs(FI[0][0]))
+            msg2[9] = round(250*np.abs(FI[0][0]))
             logica = self.bitset(logica,5)
         msg2[9] = int(msg2[9])
 
         msg2[7] = logica
         self.stm32.write(msg2)
-        self.get_logger().info('Velocidades enviadas pela serial')
+        self.get_logger().info(f'Velocidades enviadas pela serial:{msg2[8]:.2f}|{msg2[9]:.2f}')
 
     def enviar_velocidadeVW(self, msg):
 

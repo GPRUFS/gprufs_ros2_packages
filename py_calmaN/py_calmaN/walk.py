@@ -36,18 +36,20 @@ class Walk(Node):
             angles = angles[idc]
             distances = distances[idc]
             # Determinação das menores distâncias de cada lado
-            indices = np.where(np.sin(angles) > 0)
-            dR = np.min(distances[indices])
-            indices = np.where(np.sin(angles) < 0)
-            dL = np.min(distances[indices])
+            indices = np.where(np.sin(angles+(np.pi/2.0)) > 0)
+            dR = np.min(distances[indices])/1000.0
+            indices = np.where(np.sin(angles+(np.pi/2.0)) < 0)
+            dL = np.min(distances[indices])/1000.0
             # Cálculos das velocidades com correção para desvio de obstáculo
-            VL = 7.0
-            VR = 7.0
-            if dR<0.5:
-                VL = 7.0 - 7.0*(1-np.tanh((dR-0.25)*5))
-            if dL<0.5:
-                VR = 7.0 - 3.5*(1-np.tanh((dL-0.25)*5))
+            VL = 1.0
+            VR = 1.0
+            if dR<0.8:
+                VL = 1.0 - 1.0*(1-np.tanh((dR-0.25)*5))
+            if dL<0.8:
+                VR = 1.0 - 0.5*(1-np.tanh((dL-0.25)*5))
 
+            VL = 0.0
+            VR = 0.0
             # Publica as velocidades
             d = Twist()
             d.angular.x = VL
