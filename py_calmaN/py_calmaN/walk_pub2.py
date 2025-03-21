@@ -41,7 +41,14 @@ class WalkPublisher(Node):
         self.modelo_cinematico_inverso = np.linalg.inv(self.modelo_cinematico)
         self.Linear_maximo = 5.3
         self.Angular_maximo = 0.9422
-    
+        #Criação de Timer para publicar dados sensoriais
+        timer_period = 3.333*1e-3  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+
+    def timer_callback(self):
+        self.sendMeasures()
+        self.sendframe()
+
     def stm32_callback(self,msg):
         #self.sendMeasures()
         self.enviar_velocidade(msg)
@@ -146,19 +153,13 @@ def main(args=None):
     # Criação de um nó instanciando uma classe do tipo "Node", por meio de "hierarquia"
     walk_publisher = WalkPublisher()
 
-    # Executando o a rotina de execução do nó. Esse código não possui 'callbacks'
-    try:
-        while(rclpy.ok()):
-            walk_publisher.sendMeasures()
-            walk_publisher.sendframe()
-            # faz o spin do nó para habilitar recebimento de callbacks
-            rclpy.spin_once(walk_publisher)
+    # faz o spin do nó para habilitar recebimento de callbacks
+    rclpy.spin(walk_publisher)
 
-    except KeyboardInterrupt:
-        walk_publisher.lidarx2.close()
-        walk_publisher.destroy_node()
-        rclpy.shutdown()
-        print("Execução encerrada pelo usuário")
+    walk_publisher.lidarx2.close()
+    walk_publisher.destroy_node()
+    rclpy.shutdown()
+    print("Execução encerrada pelo usuário")
     
 
 

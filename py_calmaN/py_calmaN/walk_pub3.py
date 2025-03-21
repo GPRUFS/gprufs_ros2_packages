@@ -5,7 +5,7 @@ import numpy as np
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan, Image
 from geometry_msgs.msg import Twist
-import PyLidar3
+from py_lidar.LidarX2 import LidarX2
 from cv_bridge import CvBridge
 
 
@@ -14,14 +14,12 @@ class WalkPublisher(Node):
     def __init__(self):
         super().__init__('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
-        #LidarX4
-        self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
+        #LidarX2
+        self.lidarx2 = LidarX2("/dev/ttyUSB0")  # Name of the serial port, can be /dev/tty*, COM*, etc.
         self.lidar_msg = LaserScan()
-        if(not self.lidarx4.Connect()):
-            print("Cannot open lidarX4")
+        if not self.lidarx2.open():
+            print("Cannot open lidarX2")
             exit(1)
-        print("Connected to lidarX4")
-        self.lidarx4_read = self.lidarx4.StartScanning()
         # Configura tópico da câmera
         self.publisher_camera = self.create_publisher(Image, '/robot/camera', 1)
         # Configuração com a interface com a camera
@@ -37,8 +35,8 @@ class WalkPublisher(Node):
         self.vel = Twist()
         self.subscription = self.create_subscription(Twist, '/robot/cmd_vel', self.stm32_callback, 1)
         #Modelo cinemático do robô
-        R = 5.3 #raio das rodas em cm
-        d = 11.25/2 #distância entre as rodas e o centro do robô em cm
+        R = 11.5 #raio das rodas em cm
+        d = 19.5/2 #distância entre as rodas e o centro do robô em cm
         self.modelo_cinematico = 0.5*np.array([[R,R],[R/d,- R/d]])
         self.modelo_cinematico_inverso = np.linalg.inv(self.modelo_cinematico)
         self.Linear_maximo = 5.3
@@ -50,6 +48,32 @@ class WalkPublisher(Node):
 
     def enviar_velocidade(self, msg):
 
+        FI = np.array([[msg.angular.x,msg.angular.y]]).T #[v;W]
+
+        msg2 = [254,0,0,0,0,0,0,0,0,0]
+
+        logica = 0
+        if(FI[1] >= 0):  
+            msg2[8] = round(250*np.abs(FI[1][0]))
+            logica = self.bitset(logica,2)
+        else:
+            msg2[8] = round(250*np.abs(FI[1][0]))
+            logica = self.bitset(logica,3)
+        msg2[8] = int(msg2[8])
+        if(FI[0] >= 0):
+            msg2[9] = round(250*np.abs(FI[0][0]))
+            logica = self.bitset(logica,4)
+        else:
+            msg2[9] = round(250*np.abs(FI[0][0]))
+            logica = self.bitset(logica,5)
+        msg2[9] = int(msg2[9])
+
+        msg2[7] = logica
+        self.stm32.write(msg2)
+        self.get_logger().info(f'Velocidades enviadas pela serial:{msg2[8]:.2f}|{msg2[9]:.2f}')
+
+    def enviar_velocidadeVW(self, msg):
+
         V = np.array([[msg.linear.x,msg.angular.z]]).T #[v;W]
     
         if(np.abs(V[0]) > np.abs(self.Linear_maximo)):
@@ -60,37 +84,49 @@ class WalkPublisher(Node):
 
         FI = self.modelo_cinematico_inverso @ V #[fi_d;fi_e]
 
-        msg2 = [255,0,0]
-        if(FI[0] >= 0):  
-            msg2[1] = round(100*np.abs(FI[0][0]))
+        msg2 = [254,0,0,0,0,0,0,0,0,0]
+
+        logica = 0
+        if(FI[1] >= 0):  
+            msg2[8] = round(100*np.abs(FI[1][0]))
+            logica = self.bitset(logica,2)
         else:
-            msg2[1] = -round(100*np.abs(FI[0][0])) + 127
-        msg2[1] = int(msg2[1])
-        if(FI[1] >= 0):
-            msg2[2] = round(100*np.abs(FI[1][0]))
+            msg2[8] = round(100*np.abs(FI[1][0]))
+            logica = self.bitset(logica,3)
+        msg2[8] = int(msg2[8])
+        if(FI[0] >= 0):
+            msg2[9] = round(100*np.abs(FI[0][0]))
+            logica = self.bitset(logica,4)
         else:
-            msg2[2] = -round(100*np.abs(FI[1][0])) + 127
-        msg2[2] = int(msg2[2])
+            msg2[9] = round(100*np.abs(FI[0][0]))
+            logica = self.bitset(logica,5)
+        msg2[9] = int(msg2[9])
+
+        msg2[7] = logica
         self.stm32.write(msg2)
         self.get_logger().info('Velocidades enviadas pela serial')
 
     def sendMeasures(self):
-        self.get_logger().info('Enviando ...')
-        # Get latest lidar measures
-        measures = next(self.lidarx4_read)
+        measures = self.lidarx2.getMeasures()  
         if(len(measures) > 0): 
             self.lidar_msg.ranges,self.lidar_msg.angle_min,self.lidar_msg.angle_max = self.convert_to_scalar(measures)
-        self.publisher_.publish(self.lidar_msg)
+        self.publisher_lidar.publish(self.lidar_msg)
         self.get_logger().info('Medidas Enviadas')
 
     def convert_to_scalar(self,measures):
         angles = []
         distances = []
-        for angle in measures:
-            distance = float(measures[angle])
-            angles.append(angle*(np.pi/180))
-            distances.append(distance)
+        for measure in measures:
+            angles.append(measure.angle*(np.pi/180))
+            distances.append(measure.distance)
+
         return distances, np.min(angles), np.max(angles)
+    
+    def bitset(self, logica, pos, val=1):
+        if val:  # Define o bit para 1
+            return logica | (1 << (pos - 1))
+        else:  # Define o bit para 0
+            return logica & ~(1 << (pos - 1))
     
     def sendframe(self):
         ret, frame = self.camera.read()

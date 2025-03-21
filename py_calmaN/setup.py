@@ -27,6 +27,7 @@ setup(
             'walk_pub2 = py_calmaN.walk_pub2:main',
             'walk_pub3 = py_calmaN.walk_pub3:main',
             'matlab_link = py_calmaN.matlab_udp_link:main',
+	    'stop = py_calmaN.stop:main',
         ],
     },
 )

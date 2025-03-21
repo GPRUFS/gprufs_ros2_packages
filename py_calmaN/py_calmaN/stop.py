@@ -5,10 +5,10 @@ from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
 
-class Walk(Node):
+class Stop(Node):
 
     def __init__(self):
-        super().__init__('Walker')
+        super().__init__('Stop')
         # -- Realiza as inscrições nos tópicos dos sensores
         self.subscription = self.create_subscription(LaserScan, '/robot/lidar', self.lidar_callback, 1)
         self.subscription # para previnir o "warning" de variável sem uso
@@ -24,7 +24,7 @@ class Walk(Node):
 
     def timer_callback(self):
 
-        if(self.start_flag): # Controlador
+        if(False): # Controlador
             # Obtém as menores leituras de distância dos lados esquerdo e direito
             distances = np.array(self.laser_scan_data.ranges)
             angles = np.linspace(self.laser_scan_data.angle_min, self.laser_scan_data.angle_max, len(distances))
@@ -48,13 +48,12 @@ class Walk(Node):
             if dL<0.8:
                 VR = 1.0 - 0.5*(1-np.tanh((dL-0.25)*5))
 
-
             # Log
             self.get_logger().info(f'DistLeft: {dL:.2f} | DistRight: {dR:.2f}')
             self.get_logger().info(f'VelLeft: {VL:.2f} | VelRight: {VR:.2f}')
 
-            #VL = 0.0
-            #VR = 0.0
+            VL = 0.0
+            VR = 0.0
             # Publica as velocidades
             d = Twist()
             d.angular.x = VL
@@ -86,13 +85,13 @@ def main(args=None):
     rclpy.init(args=args)
 
     # Criação de um nó instanciando uma classe do tipo "Node", por meio de "hierarquia"
-    WalkSub = Walk()
+    StopSub = Stop()
 
     # faz o spin do nó para habilitar recebimento de callbacks
-    rclpy.spin(WalkSub)
+    rclpy.spin(StopSub)
 
     # especificação de shutdown
-    WalkSub.destroy_node()
+    StopSub.destroy_node()
     rclpy.shutdown()
     
 
