@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan, Image
 from geometry_msgs.msg import Twist
-from pyydlidar import YDLidarX2
+from ydlidar import YDLidar
+from cv_bridge import CvBridge
 import math
 
 
@@ -16,16 +17,16 @@ class WalkPublisher(Node):
         super().__init__('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
         
-        # Configuração do YDLidar X2
-        self.lidar = YDLidarX2()
+        # Configuração do YDLidar
+        self.lidar = YDLidar()
         port = "COM6"  # Ajuste para sua porta serial
         if not self.lidar.connect(port):
-            print(f"Cannot connect to YDLidar X2 on {port}")
+            print(f"Cannot connect to YDLidar on {port}")
             exit(1)
         
-        # Configurações do lidar X2
-        self.lidar.set_scan_frequency(10.0)  # 10 Hz
-        self.lidar.set_rotation_frequency(10.0)  # 10 Hz
+        # Configurações do lidar (ajuste conforme seu modelo específico)
+        scan_frequency = 10.0  # Hz
+        self.lidar.set_scan_frequency(scan_frequency)
         
         # Timer para leitura do lidar
         timer_period = 3.333 * 1e-3  # seconds (300 Hz)
@@ -36,7 +37,7 @@ class WalkPublisher(Node):
         self.fig, self.ax = plt.subplots()
         self.ax.set_xlabel('X (metros)')
         self.ax.set_ylabel('Y (metros)')
-        self.ax.set_title('Leituras do LIDAR X2')
+        self.ax.set_title('Leituras do LIDAR')
         self.ax.axis('equal')
         self.ax.grid(True)
 
@@ -44,50 +45,50 @@ class WalkPublisher(Node):
         self.sendMeasures()
 
     def sendMeasures(self):
-        scan_data = self.lidar.get_scan_data()
-        if scan_data:
-            lidar_msg = self.convert_scan_to_msg(scan_data)
+        scan = self.lidar.get_lidar_data()
+        if scan:
+            lidar_msg = self.convert_scan_to_msg(scan)
             self.publisher_lidar.publish(lidar_msg)
-            self.visualize_scan(scan_data)
+            self.visualize_scan(scan)
 
-    def convert_scan_to_msg(self, scan_data):
+    def convert_scan_to_msg(self, scan):
         msg = LaserScan()
         
         # Configura os parâmetros da mensagem LaserScan
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = 'lidar_frame'
         
-        # Configura os parâmetros do scan para o X2
-        msg.angle_min = math.radians(scan_data.config.min_angle)
-        msg.angle_max = math.radians(scan_data.config.max_angle)
-        msg.angle_increment = math.radians(scan_data.config.angle_step)
-        msg.time_increment = 1.0 / scan_data.config.scan_frequency / len(scan_data.ranges)
-        msg.scan_time = 1.0 / scan_data.config.scan_frequency
-        msg.range_min = scan_data.config.min_range
-        msg.range_max = scan_data.config.max_range
+        # Configura os parâmetros do scan (ajuste conforme seu lidar)
+        msg.angle_min = math.radians(scan.config.min_angle)
+        msg.angle_max = math.radians(scan.config.max_angle)
+        msg.angle_increment = math.radians(scan.config.angle_increment)
+        msg.time_increment = 1.0 / scan.config.scan_frequency / len(scan.ranges)
+        msg.scan_time = 1.0 / scan.config.scan_frequency
+        msg.range_min = scan.config.min_range
+        msg.range_max = scan.config.max_range
         
         # Preenche as leituras de distância
-        msg.ranges = scan_data.ranges
+        msg.ranges = scan.ranges
         
         return msg
     
-    def visualize_scan(self, scan_data):
+    def visualize_scan(self, scan):
         # Converte as leituras polares para coordenadas cartesianas
-        angles = np.linspace(scan_data.config.min_angle, scan_data.config.max_angle, len(scan_data.ranges))
+        angles = np.linspace(scan.config.min_angle, scan.config.max_angle, len(scan.ranges))
         angles_rad = np.radians(angles)
         
-        # Ajuste de orientação (π/2 para alinhar com a frente do robô)
+        # Ajuste de orientação (se necessário)
         angles_rad_adjusted = angles_rad - (np.pi/2.0)
         
-        x = scan_data.ranges * np.cos(angles_rad_adjusted)
-        y = scan_data.ranges * np.sin(angles_rad_adjusted)
+        x = scan.ranges * np.cos(angles_rad_adjusted)
+        y = scan.ranges * np.sin(angles_rad_adjusted)
         
         # Plotagem
         self.ax.clear()
         self.ax.plot(x, y, 'bo', markersize=2)
         self.ax.set_xlabel('X (metros)')
         self.ax.set_ylabel('Y (metros)')
-        self.ax.set_title('Leituras do LIDAR X2')
+        self.ax.set_title('Leituras do LIDAR')
         self.ax.axis('equal')
         self.ax.grid(True)
         
