@@ -5,7 +5,7 @@ import numpy as np
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan, Image
 from geometry_msgs.msg import Twist
-from py_lidar.LidarX2 import LidarX2
+import PyLidar3
 from cv_bridge import CvBridge
 
 
@@ -14,12 +14,14 @@ class WalkPublisher(Node):
     def __init__(self):
         super().__init__('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
-        #LidarX2
-        self.lidarx2 = LidarX2("/dev/ttyUSB0")  # Name of the serial port, can be /dev/tty*, COM*, etc.
+        #LidarX4
+        self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
         self.lidar_msg = LaserScan()
-        if not self.lidarx2.open():
-            print("Cannot open lidarX2")
+        if(not self.lidarx4.Connect()):
+            print("Cannot open lidarX4")
             exit(1)
+        print("Connected to lidarX4")
+        self.lidarx4_read = self.lidarx4.StartScanning()
         # Configura tópico da câmera
         self.publisher_camera = self.create_publisher(Image, '/robot/camera', 1)
         # Configuração com a interface com a camera
@@ -41,14 +43,7 @@ class WalkPublisher(Node):
         self.modelo_cinematico_inverso = np.linalg.inv(self.modelo_cinematico)
         self.Linear_maximo = 5.3
         self.Angular_maximo = 0.9422
-        #Criação de Timer para publicar dados sensoriais
-        timer_period = 3.333*1e-3  # seconds
-        self.timer = self.create_timer(timer_period, self.timer_callback)
-
-    def timer_callback(self):
-        self.sendMeasures()
-        self.sendframe()
-
+    
     def stm32_callback(self,msg):
         #self.sendMeasures()
         self.enviar_velocidade(msg)
@@ -114,19 +109,22 @@ class WalkPublisher(Node):
         self.get_logger().info('Velocidades enviadas pela serial')
 
     def sendMeasures(self):
-        measures = self.lidarx2.getMeasures()  
+        self.get_logger().info('Enviando ...')
+        # Get latest lidar measures
+        measures = next(self.lidarx4_read)
         if(len(measures) > 0): 
             self.lidar_msg.ranges,self.lidar_msg.angle_min,self.lidar_msg.angle_max = self.convert_to_scalar(measures)
-        self.publisher_lidar.publish(self.lidar_msg)
+        self.publisher_.publish(self.lidar_msg)
         self.get_logger().info('Medidas Enviadas')
+
 
     def convert_to_scalar(self,measures):
         angles = []
         distances = []
-        for measure in measures:
-            angles.append(measure.angle*(np.pi/180))
-            distances.append(measure.distance)
-
+        for angle in measures:
+            distance = float(measures[angle])
+            angles.append(angle*(np.pi/180))
+            distances.append(distance)
         return distances, np.min(angles), np.max(angles)
     
     def bitset(self, logica, pos, val=1):
@@ -153,13 +151,20 @@ def main(args=None):
     # Criação de um nó instanciando uma classe do tipo "Node", por meio de "hierarquia"
     walk_publisher = WalkPublisher()
 
-    # faz o spin do nó para habilitar recebimento de callbacks
-    rclpy.spin(walk_publisher)
+    # Executando o a rotina de execução do nó. Esse código não possui 'callbacks'
+    try:
+        while(rclpy.ok()):
+            walk_publisher.sendMeasures()
+            walk_publisher.sendframe()
+            # faz o spin do nó para habilitar recebimento de callbacks
+            rclpy.spin_once(walk_publisher)
 
-    walk_publisher.lidarx2.close()
-    walk_publisher.destroy_node()
-    rclpy.shutdown()
-    print("Execução encerrada pelo usuário")
+    except KeyboardInterrupt:
+        walk_publisher.lidarx4.StopScanning()
+        walk_publisher.lidarx4.Disconnect()
+        walk_publisher.destroy_node()
+        rclpy.shutdown()
+        print("Execução encerrada pelo usuário")
     
 
 
