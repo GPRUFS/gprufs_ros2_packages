@@ -58,7 +58,9 @@ class LidarX2:
             self.connected = False
 
     def getMeasures(self):
-        return list(self.measureList)
+        m = self.measureList
+        self.measureList = []
+        return list(m)
 
     def __measureThread(self):
         startAngle = 0

@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan, Image
+from std_msgs.msg import Int32MultiArray
 from geometry_msgs.msg import Twist
 import PyLidar3
 from cv_bridge import CvBridge
@@ -17,7 +18,7 @@ class WalkPublisher(Node):
         #LidarX4
         self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
         self.lidar_msg = LaserScan()
-        if(not self.lidarx4.Connect()):
+        while(not self.lidarx4.Connect()):
             print("Cannot open lidarX4")
             exit(1)
         print("Connected to lidarX4")
@@ -31,6 +32,10 @@ class WalkPublisher(Node):
         self.camera.set(cv2.CAP_PROP_FPS,30)
         self.image = Image()
         self.bridge = CvBridge()
+        # Configura tópico do encoder
+        self.encvel = Int32MultiArray()
+        self.encvel.data = [0, 0, 0, 0]
+        self.publisher_encoder = self.create_publisher(Int32MultiArray, '/robot/encoder', 1)
         # -- Realiza as inscrições no tópico do 
         #Comunicação USB com o stm32
         self.stm32 = serial.Serial(port = '/dev/ttyACM0',baudrate=115200)
@@ -47,6 +52,34 @@ class WalkPublisher(Node):
     def stm32_callback(self,msg):
         #self.sendMeasures()
         self.enviar_velocidade(msg)
+        self.receber_dados_encoder()
+        # Publica as velocidades no tópico
+        self.publisher_encoder.publish(self.encvel)
+
+    def receber_dados_encoder(self):
+        try:
+            # Lendo 8 bytes (4 valores int16)
+            data = self.stm32.read(8)
+            
+            # Convertendo para int16
+            valores = np.frombuffer(data, dtype=np.int16)
+            
+            if len(valores) == 4:
+                
+                # Processando os valores conforme especificado
+                self.encvel.data[0] = (valores[0])  # Posição Motor 1 (E)
+                self.encvel.data[1] = (valores[1])  # Posição Motor 2 (D)
+                self.encvel.data[2] = valores[2]  # Velocidade Motor 1 (E) (em contagens por segundo)
+                self.encvel.data[3] = valores[3]  # Velocidade Motor 2 (D) (em contagens por segundo)
+                
+                self.get_logger().info(f'Valores enviados:{self.encvel.data}')
+
+                
+            else:
+                print("Erro: Dados recebidos são insuficientes.")
+        except Exception as e:
+            print(f"Erro ao ler dados do encoder: {e}")
+
 
     def enviar_velocidade(self, msg):
 
@@ -114,7 +147,7 @@ class WalkPublisher(Node):
         measures = next(self.lidarx4_read)
         if(len(measures) > 0): 
             self.lidar_msg.ranges,self.lidar_msg.angle_min,self.lidar_msg.angle_max = self.convert_to_scalar(measures)
-        self.publisher_.publish(self.lidar_msg)
+        self.publisher_lidar.publish(self.lidar_msg)
         self.get_logger().info('Medidas Enviadas')
 
 
