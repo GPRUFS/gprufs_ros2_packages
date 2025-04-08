@@ -30,6 +30,9 @@ setup(
 	    'stop = py_calmaN.stop:main',
 	    'joystick = py_calmaN.joystickROS2:main',
 	    'lidar_test_pub = py_calmaN.lidar_test_pub:main',
+	    'model = py_calmaN.modelagem:main',
+	    'modelVal = py_calmaN.modeloValidacao:main',
+
         ],
     },
 )
