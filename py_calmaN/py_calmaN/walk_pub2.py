@@ -80,10 +80,16 @@ class WalkPublisher(Node):
         except Exception as e:
             print(f"Erro ao ler dados do encoder: {e}")
 
+    def inverter_uL(self,x):
+        return np.sign(x)*(np.abs(x) - (-0.5683))/1.9595
+
+    def inverter_uR(self,x):
+        return np.sign(x)*(np.abs(x) - (-0.7317))/1.7337
+
 
     def enviar_velocidade(self, msg):
 
-        FI = np.array([[msg.angular.x,msg.angular.y]]).T #[v;W]
+        FI = np.array([[self.inverter_uL(msg.angular.x),self.inverter_uR(msg.angular.y)]]).T #[vL;vR]
 
         msg2 = [254,0,0,0,0,0,0,0,0,0]
 
