@@ -4,7 +4,7 @@ Esse repositório contém alguns pacotes para o ROS 2 desenvolvidos para realiza
 ## Índice
 - [Requisitos](#requisitos)
 - [Como usar?](#como-usar)
-- [Descreição dos Pacotes](#descrição-dos-pacotes)
+- [Descrição dos Pacotes](#descrição-dos-pacotes)
 - [Estrutura Básica de um Nó ROS 2](#estrutura-básica-de-um-nó-ros-2)
 - [Como Criar um Pacote?](#como-criar-um-pacote)
 - [Repositórios Associados](#repositórios-associados)
