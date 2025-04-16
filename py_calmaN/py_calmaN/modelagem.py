@@ -60,6 +60,16 @@ class Modelagem(Node):
             self.d.angular.y = 0.0
             self.velPub.publish(self.d)
 
+            
+
+            self.get_logger().info('Salvando os dados')
+            with open("dados.txt","w") as f:
+                f.write(",".join((map(str,self.uL)))+"\n")
+                f.write(",".join((map(str,self.vL)))+"\n")
+                f.write(",".join((map(str,self.uR)))+"\n")
+                f.write(",".join((map(str,self.vR)))+"\n")
+            self.get_logger().info('Dados salvos')
+
             plt.figure()
             plt.subplot(2,1,1)
             plt.plot(self.vL)
@@ -69,13 +79,6 @@ class Modelagem(Node):
             plt.title("Roda Direita")
             plt.show()
 
-            self.get_logger().info('Salvando os dados')
-            with open("dados.txt","w") as f:
-                f.write(",".join((map(str,self.uL)))+"\n")
-                f.write(",".join((map(str,self.vL)))+"\n")
-                f.write(",".join((map(str,self.uR)))+"\n")
-                f.write(",".join((map(str,self.vR)))+"\n")
-            self.get_logger().info('Dados salvos')
             exit(1)
 
 
