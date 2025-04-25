@@ -12,8 +12,8 @@ from cv_bridge import CvBridge
 
 class WalkPublisher(Node):
 
-    def _init_(self):
-        super()._init_('walk_publisher')
+    def __init__(self):
+        super().__init__('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX4
         self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
@@ -208,5 +208,5 @@ def main(args=None):
     
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     main()
