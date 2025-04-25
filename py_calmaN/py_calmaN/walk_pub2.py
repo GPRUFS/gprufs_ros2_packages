@@ -12,8 +12,8 @@ from cv_bridge import CvBridge
 
 class WalkPublisher(Node):
 
-    def __init__(self):
-        super().__init__('walk_publisher')
+    def _init_(self):
+        super()._init_('walk_publisher')
         self.publisher_lidar = self.create_publisher(LaserScan, '/robot/lidar', 1)
         #LidarX4
         self.lidarx4 = PyLidar3.YdLidarX4("/dev/ttyUSB0",2000)
@@ -89,7 +89,8 @@ class WalkPublisher(Node):
 
     def enviar_velocidade(self, msg):
 
-        FI = np.array([[self.inverter_uL(msg.angular.x),self.inverter_uR(msg.angular.y)]]).T #[vL;vR]
+        #FI = np.array([[self.inverter_uL(msg.angular.x),self.inverter_uR(msg.angular.y)]]).T #[vL;vR]
+        FI = np.array([[msg.angular.x,msg.angular.y]]).T #[vL;vR] - Sem controlador de baixo nivel
 
         msg2 = [254,0,0,0,0,0,0,0,0,0]
 
@@ -207,5 +208,5 @@ def main(args=None):
     
 
 
-if __name__ == '__main__':
+if _name_ == '_main_':
     main()
