@@ -6,11 +6,23 @@ from sensor_msgs.msg import Imu
 from std_msgs.msg import Float32MultiArray
 import serial
 import numpy as np
+
 def bitset(valor, pos, val=1):
     if val:
         return valor | (1 << (pos - 1))
     else:
         return valor & ~(1 << (pos - 1))
+
+def inverter_uL(x):
+    return np.sign(x)*(np.abs(x) - (-0.414))/1.459
+
+def inverter_uR(x):
+    return np.sign(x)*(np.abs(x) - (-0.404))/1.423
+def satura(x):
+    if np.abs(x)>1:
+        return np.sign(x)
+    else:
+        return x
 
 class STM32Bridge(Node):
     def __init__(self):
@@ -113,6 +125,9 @@ class STM32Bridge(Node):
         Vmax = 35
         uL = v_l/Vmax #m/s ->  -1 a 1
         uR = v_r/Vmax #m/s ->  -1 a 1
+
+        uL = satura(inverter_uL(uL))
+        uR = satura(inverter_uR(uR))
 
         msg = [254, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
