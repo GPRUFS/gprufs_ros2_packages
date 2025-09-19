@@ -149,7 +149,7 @@ class STM32Bridge(Node):
 
         return bytes(msg)
 
-    def main(args=None):
+def main(args=None):
         rclpy.init(args=args)
         node = STM32Bridge()
         try:
