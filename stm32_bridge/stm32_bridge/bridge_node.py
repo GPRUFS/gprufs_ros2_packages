@@ -36,8 +36,8 @@ class STM32Bridge(Node):
         #parâmetros configuráveis
         self.declare_parameter('serial_port', '/dev/ttyACM0')
         self.declare_parameter('baud_rate', 115200)
-        self.declare_parameter('wheels_radius', 0.05)  # em metros
-        self.declare_parameter('wheels_distance', 0.2)     # distância entre as rodas em metros
+        self.declare_parameter('wheels_radius', 0.03)  # em metros
+        self.declare_parameter('wheels_distance', 0.173) # distância entre as rodas em metros
 
         #carregar parâmetros
         self.port = self.get_parameter('serial_port').value
@@ -70,7 +70,7 @@ class STM32Bridge(Node):
         2 
         )
 
-        self.timer = self.create_timer(0.02, self.read_serial)  # 500 Hz (2 ms)
+        self.timer = self.create_timer(2e-3, self.read_serial)  # 500 Hz (2 ms)
 
     def _open_serial(self): 
         try:
@@ -101,7 +101,9 @@ class STM32Bridge(Node):
                 
                 # publicando encoder
                 encoder_msg = Float32MultiArray()
-                encoder_msg.data = [values[2],values[3]] # encoder1 e encoder2
+                phi_l = values[2]*(2*np.pi/(4*224.4*1e-3)) #rad/s
+                phi_d = values[3]*(2*np.pi/(4*224.4*1e-3)) #rad/s
+                encoder_msg.data = [values[0] - 32000,values[1] - 32000,phi_l,phi_d] # encoder1 e encoder2
                 self.encoder_publisher.publish(encoder_msg)
 
                 # publicando IMU
@@ -122,7 +124,7 @@ class STM32Bridge(Node):
         return v_r, v_l
     
     def _montar_mensagem(self, v_r, v_l):
-        Vmax = 35
+        Vmax = 25.2 #rad/s velocidade máxima de cada roda
         uL = v_l/Vmax #m/s ->  -1 a 1
         uR = v_r/Vmax #m/s ->  -1 a 1
 
